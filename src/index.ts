@@ -14,15 +14,20 @@ const store = new myStore({
   collection: "sessions", // Name of the MongoDB collection to store sessions
 })
 
-app.use(
-  expressSession({
-    secret: keys.secret, // A strong secret for signing the session ID
-    resave: false,
-    saveUninitialized: false,
-    store: store,
-    cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 },
-  })
-)
+const sess = {
+  secret: keys.secret, // A strong secret for signing the session ID
+  resave: false,
+  saveUninitialized: false,
+  store: store,
+  cookie: { secure: false, maxAge: 30 * 24 * 60 * 60 * 1000 },
+}
+
+if (keys.environment === "PROD") {
+  app.set("trust proxy", 1) // trust first proxy
+  sess.cookie.secure = true // serve secure cookies
+}
+
+app.use(expressSession(sess))
 
 app.use(passport.initialize())
 app.use(passport.session())

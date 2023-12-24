@@ -1,11 +1,20 @@
 import dotenv from "dotenv"
 dotenv.config()
 
-const keys = {
-  googleClientID: process.env.GOOGLE_CLIENT_ID as string,
-  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-  secret: process.env.SECRET as string,
-  databaseURL: process.env.DATABASE_URL as string,
+interface Keys {
+  googleClientID: string
+  googleClientSecret: string
+  secret: string
+  databaseURL: string
+  environment: "PROD" | "DEV"
+}
+
+const keys: Keys = {
+  googleClientID: process.env.GOOGLE_CLIENT_ID || "",
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+  secret: process.env.SECRET || "",
+  databaseURL: process.env.DATABASE_URL || "",
+  environment: (process.env.ENVIRONMENT as "PROD" | "DEV") || "DEV",
 }
 
 export default keys
